@@ -5,14 +5,14 @@ import {ViewRecipeComponent} from './view-recipe/view-recipe.component';
 import {ListRecipesComponent} from './list-recipes/list-recipes.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
-    CreateRecipeComponent,
-    ViewRecipeComponent,
-    ListRecipesComponent
-  ]
+    imports: [
+        CommonModule
+    ],
+    declarations: [
+        CreateRecipeComponent,
+        ViewRecipeComponent,
+        ListRecipesComponent
+    ]
 })
 export class RecipeModule {
 }
