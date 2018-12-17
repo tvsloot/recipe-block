@@ -1,3 +1,9 @@
-<p>
-  create-recipe works!
-</p>
+<form [formGroup]="recipeForm" (ngSubmit)="createRecipe()">
+
+    <mat-form-field>
+        <input matInput type="text" formControlName="name" placeholder="Name">
+    </mat-form-field>
+
+    <button mat-fab color="primary" type="submit" [disabled]="!recipeForm.valid">Submit</button>
+
+</form>
