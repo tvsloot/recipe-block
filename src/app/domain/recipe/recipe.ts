@@ -20,6 +20,7 @@ export type Ingredients = Array<Ingredient>;
 export interface Ingredient {
     name: string;
     quantity: Quantity;
+    index: number;
 }
 
 export interface Quantity {
@@ -30,6 +31,6 @@ export interface Quantity {
 export type Steps = Array<Step>;
 
 export interface Step {
-    position: number;
     value: string;
+    index: number;
 }

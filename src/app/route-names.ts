@@ -1,4 +1,4 @@
-export const RouteNames = {
+export const routeNames = {
   recipe: {
     list: 'recipes',
     create: 'recipes/create',

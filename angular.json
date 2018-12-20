@@ -118,5 +118,10 @@
       }
     }
   },
-  "defaultProject": "recipe-block"
+  "defaultProject": "recipe-block",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
