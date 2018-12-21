@@ -1,6 +1,8 @@
+import {UserId} from '../../user/user';
+
 export interface Recipe {
-    id: string;
-    userId: string;
+    id: RecipeId;
+    userId: UserId;
     created: Date;
     updated: Date;
     name: string;
@@ -9,6 +11,8 @@ export interface Recipe {
     description?: string;
     thumbnail?: string;
 }
+
+export type RecipeId = string;
 
 export interface NewRecipeData {
     name: string;

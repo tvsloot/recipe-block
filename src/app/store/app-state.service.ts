@@ -10,6 +10,6 @@ export class AppStateService {
     }
 
     public fireEvent(event: ClientEvent): void {
-        this.ngRedux.dispatch(event);
+        this.ngRedux.dispatch({...event});
     }
 }

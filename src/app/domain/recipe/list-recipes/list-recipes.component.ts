@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {routeNames} from '../../../route-names';
+import {routeNames} from '../../../routing/route-names';
 
 @Component({
     selector: 'rb-list-recipes',

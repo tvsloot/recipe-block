@@ -1,8 +1,8 @@
 import {Observable} from 'rxjs';
-import {NewRecipeData} from './recipe';
+import {NewRecipeData, Recipe} from './recipe';
 
 export abstract class RecipeService {
 
-    public abstract createRecipe(data: NewRecipeData): Observable<void>;
+    public abstract createRecipe(data: NewRecipeData): Observable<Recipe>;
 
 }

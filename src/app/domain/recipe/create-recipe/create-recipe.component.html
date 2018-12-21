@@ -8,20 +8,16 @@
         <div formArrayName="ingredients"
              *ngFor="let control of ingredientsForm.controls; let i = index;" cdkDrag>
             <div [formGroupName]="i">
-                <mat-form-field>
-                    <input matInput type="number" formControlName="quantityValue" placeholder="Quantity">
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput type="text" formControlName="quantityUnit" placeholder="Unit of Measurement">
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput type="text" formControlName="ingredientName" placeholder="Ingredient">
-                </mat-form-field>
+
+
+
                 <button type="button" (click)="removeIngredient(i)">Remove Ingredient -</button>
+
             </div>
         </div>
     </div>
-    <button type="button" (click)="addIngredient()">Add Ingredient +</button>
+
+    <button type="button" mat-button (click)="addIngredient()">Add Ingredient +</button>
 
     <button type="submit" mat-fab color="primary" [disabled]="!recipeForm.valid">Submit</button>
 

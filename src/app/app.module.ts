@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {RecipeModule} from './domain/recipe/recipe.module';
 import {RouterModule} from '@angular/router';
-import {appRoutes} from './app.routes';
+import {appRoutes} from './routing/app.routes';
 import {PageNotFoundComponent} from './page-not-found.component';
 import {StoreModule} from './store/store.module';
 import {AppStateService} from './store/app-state.service';

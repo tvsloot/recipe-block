@@ -1,4 +1,6 @@
 export interface User {
-    id: string;
+    id: UserId;
     name: string;
 }
+
+export type UserId = string;
