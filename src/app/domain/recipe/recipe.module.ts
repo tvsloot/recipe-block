@@ -7,7 +7,7 @@ import {ViewRecipeComponent} from './view-recipe/view-recipe.component';
 import {ListRecipesComponent} from './list-recipes/list-recipes.component';
 import {RecipeService} from './recipe.service';
 import {StatefulRecipeService} from './services/stateful-recipe.service';
-import { ViewIngredientComponent } from './ingredients/view-ingredient/view-ingredient.component';
+import {ViewIngredientComponent} from './ingredients/view-ingredient/view-ingredient.component';
 
 @NgModule({
     imports: [
@@ -23,6 +23,9 @@ import { ViewIngredientComponent } from './ingredients/view-ingredient/view-ingr
     ],
     providers: [
         {provide: RecipeService, useClass: StatefulRecipeService}
+    ],
+    entryComponents: [
+        ViewIngredientComponent
     ]
 })
 export class RecipeModule {

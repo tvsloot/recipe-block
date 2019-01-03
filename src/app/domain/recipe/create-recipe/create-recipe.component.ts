@@ -1,13 +1,22 @@
-import {forEach} from 'lodash';
+import {findIndex, forEach, pullAt} from 'lodash';
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
-import {take} from 'rxjs/operators';
-import {NewRecipeData} from '../recipe';
-import {RecipeService} from '../recipe.service';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {take} from 'rxjs/operators';
+import {NewRecipeData, Recipe, RecipeId} from '../recipe';
+import {RecipeService} from '../recipe.service';
 import {ApplicationError} from '../../../error-handling/application-error';
 import {RouteBuilder} from '../../../routing/route-builder';
+import {Dictionary} from '../../../utils/dictionary';
+import {
+    ViewIngredientComponent,
+    ViewIngredientData,
+    ViewIngredientDialogRef
+} from '../ingredients/view-ingredient/view-ingredient.component';
+import {Ingredient, Ingredients} from '../ingredients/ingredients';
+import {IngredientFactory} from '../ingredients/ingredient-factory';
 
 @Component({
     selector: 'rb-create-recipe',
@@ -17,11 +26,17 @@ import {RouteBuilder} from '../../../routing/route-builder';
 export class CreateRecipeComponent implements OnInit {
 
     public recipeForm: FormGroup;
-    public ingredientsForm: FormArray;
 
     constructor(private recipeService: RecipeService,
-                private formBuilder: FormBuilder,
+                private dialog: MatDialog,
                 private router: Router) {
+    }
+
+    public get model(): NewRecipeData {
+        return {
+            name: '',
+            ingredients: []
+        };
     }
 
     public ngOnInit(): void {
@@ -33,58 +48,82 @@ export class CreateRecipeComponent implements OnInit {
         this.recipeService.createRecipe(data)
             .pipe(take(1))
             .subscribe(
-                (recipe) => this.router.navigate(RouteBuilder.getRecipeViewRouterCommands(recipe.id)),
-                (err) => this.handleError(err)
+                (recipe) => this.handleRecipeCreationSuccess(recipe),
+                (err) => this.handleRecipeCreationError(err)
             );
     }
 
-    public drop(event: CdkDragDrop<Array<FormGroup>>): void {
-        moveItemInArray(this.ingredientsForm.controls, event.previousIndex, event.currentIndex);
-        this.resetIngredientIndices();
+    public openIngredientDialog(existingIngredient?: Ingredient): void {
+        const ingredient = IngredientFactory.buildIngredient(existingIngredient);
+        const dialog = this.getIngredientDialog(ingredient);
+        this.monitorIngredientDialog(dialog);
     }
 
-    public addIngredient(): void {
-        const index = this.ingredientsForm.length;
-        this.ingredientsForm.push(this.getIngredientTemplate(index));
+    public removeIngredient(index: number): void {
+        const ingredients = this.getCurrentIngredients();
+        pullAt(ingredients, index);
+        this.recipeForm.patchValue({ingredients});
     }
 
-    public removeIngredient(i: number): void {
-        this.ingredientsForm.removeAt(i);
-        this.resetIngredientIndices();
+    public drop(event: CdkDragDrop<Array<unknown>>): void {
+        const ingredients = this.getCurrentIngredients();
+        moveItemInArray(ingredients, event.previousIndex, event.currentIndex);
     }
 
-    private resetIngredientIndices(): void {
-        let index = 0;
-        this.ingredientsForm.controls.forEach((control) => {
-            control.patchValue({index});
-            index++;
+    private getIngredientDialog(ingredient: Ingredient): ViewIngredientDialogRef {
+        return this.dialog.open<ViewIngredientComponent, ViewIngredientData>(ViewIngredientComponent, {
+            data: {ingredient}
         });
+    }
+
+    private monitorIngredientDialog(dialogRef: ViewIngredientDialogRef): void {
+        dialogRef.afterClosed()
+            .pipe(take(1))
+            .subscribe((data) => {
+                if (data) {
+                    this.updateIngredients(data.ingredient);
+                }
+            });
+    }
+
+    private updateIngredients(newIngredient: Ingredient): void {
+        const ingredients = this.getCurrentIngredients();
+        const existingIndex = findIndex(ingredients, ((i) => i.id === newIngredient.id));
+        if (existingIndex > -1) {
+            ingredients[existingIndex] = newIngredient;
+        } else {
+            ingredients.push(newIngredient);
+        }
+        this.recipeForm.patchValue({ingredients});
     }
 
     private buildForm(): void {
-        this.recipeForm = this.formBuilder.group({
-            name: ['', Validators.required],
-            ingredients: this.formBuilder.array([
-                this.getIngredientTemplate(0)
-            ], {validators: Validators.required})
+        const formControls: Dictionary<FormControl> = {};
+        forEach(this.model, (value, key) => {
+            formControls[key] = new FormControl(value);
         });
 
-        this.ingredientsForm = this.recipeForm.get('ingredients') as FormArray;
+        this.setFormValidators(formControls);
+        this.recipeForm = new FormGroup(formControls);
     }
 
-    private getIngredientTemplate(index: number): FormGroup {
-        return this.formBuilder.group({
-            name: ['', Validators.required],
-            index: [index],
-            quantity: this.formBuilder.group({
-                unit: ['', Validators.required],
-                value: [0, Validators.min(0.0001)]
-            })
-        });
+    private setFormValidators(formControls: Dictionary<FormControl>): void {
+        forEach(formControls, (control) => control.setValidators(Validators.required));
     }
 
-    private handleError(err: ApplicationError): void {
+    private getCurrentIngredients(): Ingredients {
+        return this.recipeForm.get('ingredients').value;
+    }
+
+    private handleRecipeCreationSuccess(recipe: Recipe): void {
+        this.navigateToRecipe(recipe.id);
+    }
+
+    private navigateToRecipe(id: RecipeId): void {
+        this.router.navigate(RouteBuilder.getRecipeViewRouterCommands(id));
+    }
+
+    private handleRecipeCreationError(err: ApplicationError): void {
         console.log('TRVA err: ', err);
     }
-
 }

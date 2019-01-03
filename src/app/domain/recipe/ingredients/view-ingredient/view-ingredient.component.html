@@ -1,24 +1,34 @@
-<div mat-dialog-content>
-    <mat-form-field>
-        <input matInput type="text" formControlName="name" placeholder="Ingredient">
-    </mat-form-field>
+<form [formGroup]="ingredientForm" (ngSubmit)="saveIngredient()">
 
-    <div formGroupName="quantity">
+    <h2 mat-dialog-title>Ingredient</h2>
+
+    <div mat-dialog-content>
         <mat-form-field>
-            <input matInput type="number" formControlName="value" placeholder="Quantity">
+            <input matInput type="text" formControlName="name" placeholder="Name" cdkFocusInitial>
         </mat-form-field>
-        <mat-form-field>
-            <mat-select formControlName="unit" placeholder="Unit of Measurement">
-                <mat-optgroup *ngFor="let group of unitsOfMeasurement" [label]="group.type">
-                    <mat-option *ngFor="let unit of group.units" [value]="unit.name">
-                        {{unit.name}} ({{unit.abbreviation}})
-                    </mat-option>
-                </mat-optgroup>
-            </mat-select>
-        </mat-form-field>
+
+        <div formGroupName="quantity">
+            <mat-form-field>
+                <input matInput type="number" formControlName="value" placeholder="Quantity">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-select formControlName="unit" placeholder="Unit of Measurement">
+                    <mat-optgroup *ngFor="let group of unitsOfMeasurement" [label]="group.type">
+                        <mat-option *ngFor="let unit of group.units" [value]="unit.name">
+                            {{unit.name}} ({{unit.abbreviation}})
+                        </mat-option>
+                    </mat-optgroup>
+                </mat-select>
+            </mat-form-field>
+        </div>
     </div>
-</div>
-<div mat-dialog-actions>
-    <button type="button" mat-button (click)="cancel()">Cancel</button>
-    <button type="button" [mat-dialog-close]="data" cdkFocusInitial>Done</button>
-</div>
+
+    <div mat-dialog-actions>
+        <button type="button" mat-button (click)="cancel()">
+            Cancel
+        </button>
+        <button type="submit" mat-button color="primary" [disabled]="!ingredientForm.valid">
+            Done
+        </button>
+    </div>
+</form>

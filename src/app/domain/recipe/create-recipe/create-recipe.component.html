@@ -5,19 +5,14 @@
     </mat-form-field>
 
     <div cdkDropList (cdkDropListDropped)="drop($event)">
-        <div formArrayName="ingredients"
-             *ngFor="let control of ingredientsForm.controls; let i = index;" cdkDrag>
-            <div [formGroupName]="i">
-
-
-
-                <button type="button" (click)="removeIngredient(i)">Remove Ingredient -</button>
-
-            </div>
+        <div *ngFor="let ingredient of recipeForm.get('ingredients').value; let i = index;" cdkDrag>
+            <span>{{ingredient.name}}</span>
+            <button type="button" (click)="openIngredientDialog(ingredient)">Edit Ingredient</button>
+            <button type="button" (click)="removeIngredient(i)">Remove Ingredient</button>
         </div>
     </div>
 
-    <button type="button" mat-button (click)="addIngredient()">Add Ingredient +</button>
+    <button type="button" mat-button (click)="openIngredientDialog()">Add Ingredient +</button>
 
     <button type="submit" mat-fab color="primary" [disabled]="!recipeForm.valid">Submit</button>
 

@@ -1,4 +1,5 @@
 import {UserId} from '../../user/user';
+import {Ingredients} from './ingredients/ingredients';
 
 export interface Recipe {
     id: RecipeId;
@@ -19,14 +20,6 @@ export interface NewRecipeData {
     ingredients: Ingredients;
 }
 
-export type Ingredients = Array<Ingredient>;
-
-export interface Ingredient {
-    name: string;
-    quantity: Quantity;
-    index: number;
-}
-
 export interface Quantity {
     unit: string;
     value: number;
@@ -36,5 +29,4 @@ export type Steps = Array<Step>;
 
 export interface Step {
     value: string;
-    index: number;
 }
