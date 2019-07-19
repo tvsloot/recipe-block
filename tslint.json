@@ -46,7 +46,6 @@
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
-    "no-unused-variable": true,
     "no-var-keyword": true,
     "one-line": [
       true,
@@ -75,12 +74,8 @@
       "check-separator",
       "check-type"
     ],
-    "use-input-property-decorator": true,
-    "use-output-property-decorator": true,
-    "use-host-property-decorator": true,
     "no-input-rename": false,
     "no-output-rename": true,
-    "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "member-access": true,
     "component-class-suffix": true,
@@ -155,7 +150,6 @@
     ],
     "use-isnan": true,
     "prefer-const": true,
-    "no-use-before-declare": true,
     "object-literal-sort-keys": false,
     "only-arrow-functions": false,
     "space-before-function-paren": false,
